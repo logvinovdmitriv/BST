@@ -11,56 +11,241 @@ private:
 	{
 	public:
 		
-		T data;
+		T data=T();
 		Node* pLeft=nullptr;
 		Node* pRight=nullptr;
 	};
 	Node* Root=nullptr;
-	void insertNode(Node* current, Node*& nodeForInsert);
+	int size = NULL;
+	void insertNode(Node* current, Node* nodeForInsert);
+	bool isExistNode(Node* current, T& data);
+	void printNode(Node* current);
+	void removeNode(Node* current, T& data);
+	void removeLeafs(Node* current);
+	
 public:
-	bool isExist(T& data);
-	void insert(T& data);
+	bool isExist(T data);
+	void insert(T data);
+	void remove(T data);
+	void printTree();
+	void clear();
+	int Size();
+	~BST();
+};
+
+template<typename T>
+inline BST<T>::~BST()
+{
+	clear();
+}
+
+template<typename T>
+inline void BST<T>::insert(T data)
+{
+	Node* nodeForInsert = new Node;
+	nodeForInsert->data = data;
+	auto current = Root;
+	if (Root == nullptr)
+	{
+		Root = nodeForInsert;
+	}
+	insertNode(current, nodeForInsert);
+	size++;
+}
+
+
+template<typename T>
+inline void BST<T>::printTree()
+{
+	if (size > 0)
+	{
+		printNode(Root);
+	}
+	else
+	{
+		cout << "Tree is empty"<<endl;
+	}
+	
+}
+
+template<typename T>
+inline void BST<T>::clear()
+{
+	removeLeafs(Root);
+	Root = nullptr;
+}
+
+template<typename T>
+inline int BST<T>::Size()
+{
+	return size;
+}
+
+
+
+template<typename T>
+inline void BST<T>::removeLeafs(Node* current)
+{
+	if (current == nullptr) return;
+
+	/* first delete both subtrees */
+	removeLeafs(current->pLeft);
+	removeLeafs(current->pRight);
+
+	/* then delete the node */
+//	cout << "\n Deleting node: " << current->data;
+	delete current;
+	size--;
+}
+
+
+template<typename T>
+inline void BST<T>::printNode(Node* current)
+{
+	if (current != nullptr)
+	{
+		cout << current->data << "\t";
+		printNode(current->pLeft);
+		printNode(current->pRight);
+		
+	};
+}
+template<typename T>
+inline void BST<T>::remove(T data)
+{
+	removeNode(Root, data);
+}
+
+template<typename T>
+inline void BST<T>::removeNode(Node* current, T& data)
+{
+	if (Root->data == data)
+	{
+		auto oldRoot = Root;
+		Root = Root->pLeft;
+		insertNode(Root, oldRoot->pRight);
+		delete oldRoot;
+		size--;
+		current = Root;
+		return;
+	};
+	if (current->pLeft != nullptr)
+	{
+		if (current->pLeft->data == data)
+		{
+			auto forDelete = current->pLeft;
+			if (forDelete->pLeft != nullptr)
+			{
+				insertNode(Root, forDelete->pLeft);
+			};
+			if (forDelete->pRight != nullptr)
+			{
+				insertNode(Root, forDelete->pRight);
+			}
+			delete forDelete;
+			size--;
+			current->pLeft = nullptr;
+			return;
+			
+		};
+	}
+	
+	if (current->pRight != nullptr)
+	{
+		if (current->pRight->data == data)
+		{
+			auto forDelete = current->pRight;
+			if (forDelete->pLeft != nullptr)
+			{
+				insertNode(Root, forDelete->pLeft);
+			};
+			if (forDelete->pRight != nullptr)
+			{
+				insertNode(Root, forDelete->pRight);
+			}
+			delete forDelete;
+			size--;
+			current->pRight = nullptr;
+			return;
+		};
+	}
+	if (current->data > data)
+	{
+		removeNode(current->pLeft, data);
+	};
+	if (current->data < data)
+	{
+		removeNode(current->pRight, data);
+	};
+}
+
+
+template<typename T>
+inline void BST<T>::insertNode(Node* current, Node* nodeForInsert)
+{
+	if (current == nullptr)
+	{
+		current = nodeForInsert;
+	};
+	
+	if (nodeForInsert != nullptr)
+	{
+		if (nodeForInsert->data < current->data)
+		{
+			if (current->pLeft == nullptr)
+			{
+				current->pLeft = nodeForInsert;
+			}
+			else
+			{
+				insertNode(current->pLeft, nodeForInsert);
+			}
+
+		};
+		if (nodeForInsert->data > current->data)
+		{
+			if (current->pRight == nullptr)
+			{
+				current->pRight = nodeForInsert;
+			}
+			else
+			{
+				insertNode(current->pRight, nodeForInsert);
+			}
+
+		};
+		
+			if (nodeForInsert->data == current->data)
+			{
+				current->data = nodeForInsert->data;
+			};
+		
+	}
+}
+
+template<typename T>
+inline bool BST<T>::isExist(T data)
+{
+	return isExistNode(Root, data);
+};
+
+
+template<typename T>
+inline bool BST<T>::isExistNode(Node* current, T& data)
+{
+	if (current->data == data)
+	{
+		return true;
+	};
+	isExistNode(current->pLeft, data);
+	isExistNode(current->pRight, data);
+	return false;
 };
 
 
 
 
 
-template<typename T>
-inline void BST<T>::insertNode(Node* current, Node*& nodeForInsert)
-{
-	if (current == nullptr)
-	{
-		current = nodeForInsert;
-	};
-	if (nodeForInsert->data < current->data)
-	{
-		insertNode(current->pLeft, nodeForInsert);
-	};
-	if (nodeForInsert->data > current->data)
-	{
-		insertNode(current->pRight, nodeForInsert);
-	};
-	if (nodeForInsert->data == current->data)
-	{
-		current->data = nodeForInsert->data;
-	};
-}
-
-template<typename T>
-inline bool BST<T>::isExist(T& data)
-{
-
-	return false;
-}
-
-template<typename T>
-inline void BST<T>::insert(T& data)
-{
-	Node* nodeForInsert = new Node(data);
-	auto current = Root;
-	insertNode(current, nodeForInsert);
-}
 
 
 

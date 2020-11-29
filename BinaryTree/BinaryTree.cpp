@@ -1,11 +1,35 @@
-﻿// BinaryTree.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
-//
+﻿#include "BST.h"
 
 #include <iostream>
 
 int main()
 {
-    std::cout << "Hello World!\n";
+	BST<int> tree;
+	
+	/*tree.insert(5);
+	cout << "size : "<<tree.Size() << endl;
+	tree.insert(2);
+	cout << "size : " << tree.Size() << endl;
+	tree.insert(8);
+	cout << "size : " << tree.Size() << endl;
+	tree.insert(-10);
+	cout << "size : " << tree.Size() << endl;
+	tree.insert(3);
+	cout << "size : " << tree.Size() << endl;
+	cout << "TREE" << endl;
+	tree.printTree();
+	cout << endl;
+	tree.remove(8);
+	cout << "size : " << tree.Size() << endl;
+
+
+	cout << "TREE" << endl;
+	tree.printTree();
+
+
+	tree.clear();
+	cout << "size : " << tree.Size() << endl;
+	tree.printTree();*/
 }
 
 // Запуск программы: CTRL+F5 или меню "Отладка" > "Запуск без отладки"
